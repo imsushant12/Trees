@@ -3,6 +3,7 @@
 #include <bits/stdc++.h>
 #include <iostream>
 #include <stack>
+#include <queue>
 
 using namespace std;
 
@@ -37,7 +38,7 @@ struct treenode* create()
 
 void preorder(struct treenode *root)
 {
-    stack <treenode*> s;                                              //tree node type stack
+    stack <treenode*> s;                                                    //tree node type stack
 
     while((root != NULL) || (!s.empty()))
     {
@@ -122,6 +123,32 @@ void postorder(struct treenode *root)
 
 }
 
+void levelorder(struct treenode *root)
+{
+    queue <treenode*> q;
+
+    cout<<root->info<<" ";
+    q.push(root);
+
+    while(!q.empty())
+    {
+        root = q.front();
+        q.pop();
+
+        if(root->left)
+        {
+            cout<<root->left->info<<" ";
+            q.push(root->left);
+        }
+        if(root->right)
+        {
+            cout<<root->right->info<<" ";
+            q.push(root->right);
+        }
+    }
+
+    cout<<endl;
+}
 
 
 int main()
@@ -138,6 +165,9 @@ int main()
 
     cout<<"\nPost-order is : ";
     postorder(root);
+
+    cout<<"\nLevel-order is : ";
+    levelorder(root);
 
     return 0;
 }
