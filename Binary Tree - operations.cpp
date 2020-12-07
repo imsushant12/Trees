@@ -1576,7 +1576,7 @@ int identical(struct treenode *main , struct treenode *sub)
     if(main == NULL && sub == NULL)
         return 1;
 
-    if(main == NULL && sub == NULL)
+    if(main == NULL || sub == NULL)
         return 0;
 
     return((main->info == sub->info) && identical(main->left , sub->left) && identical(main->right , sub->right));
