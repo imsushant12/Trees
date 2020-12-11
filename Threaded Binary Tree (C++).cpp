@@ -11,93 +11,89 @@ struct treenode
     struct treenode *left;
     struct treenode *right;
 };
-struct treenode *dummy = new treenode;
 
-//1-----------------------------------------------------------------------------------------------------------------------------
-
-struct treenode* create(int data)
+struct treenode* insertion(struct treenode *root, int data)
 {
+    treenode *ptr = root;
+    treenode *par = NULL;
+    while (ptr != NULL)
+    {
+        par = ptr;
+
+        if (data < ptr->info)
+        {
+            if (ptr -> ltag == 0)
+                ptr = ptr -> left;
+            else
+                break;
+        }
+        else
+        {
+            if (ptr->rtag == 0)
+                ptr = ptr -> right;
+            else
+                break;
+        }
+    }
+
+    //creating a new node
     struct treenode *newnode = new treenode;
     newnode->info = data;
-    newnode->left = NULL;           //initially both left and right pointer points to NULL
-    newnode->right = NULL;
-    newnode->ltag = 0;              //initially both ltag and rtag are 0
-    newnode->rtag = 0;
-    return newnode;
-}
+    newnode->ltag = 1;
+    newnode->rtag = 1;
 
-struct treenode* insertion(struct treenode *root , struct treenode *newnode)
-{
-    if(root == NULL)                //as root is null so the inserted node will be the first node or the root node
+    if(par == NULL)
     {
-        root = newnode;             //newly inserted node will become first node or the root node
-
-        dummy->left = root;         //dummy node's left always points the root node
-        dummy->right = dummy;      //dummy node's right always points itself
-        dummy->ltag = 1;            //both ltag and rtag are 1 for dummy node (it is pointing a child i.e. root)
-        dummy->rtag = 1;
-        dummy->info = INT_MAX;         //any random value can be assigned
-
-        root->left = dummy;         //it is the first node so both left and right will point the dummy node
-        root->right = dummy;
-
-        return root;
+        root = newnode;
+        newnode->left = NULL;
+        newnode->right = NULL;
     }
-
-    //when already a tree a present
+    else if(data < par->info)
+    {
+        newnode->left = par->left;
+        newnode->right = par;
+        par->ltag = 0;
+        par->left = newnode;
+    }
     else
     {
-        if(newnode->info < root->info)        //using the property of BST for deciding the position of new node
-        {
-            newnode->left = root->left;
-            root->left = newnode;
-            newnode->right = root;
-            root->ltag = 1;
-
-            return root;
-        }
-
-        if(newnode->info > root->info)
-        {
-            newnode->right = root->right;
-            root->right = newnode;
-            newnode->left = root;
-            root->rtag = 1;
-
-            return root;
-        }
+        newnode->left = par;
+        newnode->right = par->right;
+        par->rtag = 0;
+        par->right = newnode;
     }
+
+    return root;
 }
 
-
-
-//2-----------------------------------------------------------------------------------------------------------------------------
-
-void inorder(struct treenode *dummy)
+struct treenode *inorderSuccessor(struct treenode *root)
 {
-    if(dummy == NULL)
-        return;
+    if (root->rtag == 1)
+        return root->right;
 
-    struct treenode *temp = dummy->left;
+    root = root->right;
 
-    while(temp != dummy)
-    {
-        while(temp->ltag == 1)      //first going to the left most node and then printing the node
-            temp = temp->left;
-
-        cout<<temp->info<<"  ";
-
-        while(temp->rtag == 0)
-        {
-            temp = temp->right;
-            if(temp == dummy)
-                return;
-            cout<<temp->info<<"  ";
-        }
-        temp = temp->right;
-    }
+    while (root->ltag == 0)
+        root = root->left;
+    return root;
 }
 
+void inorder(struct treenode *root)
+{
+    struct treenode *temp = root;
+
+    if (root == NULL)
+        cout<<"Tree is empty";
+
+    while(temp->ltag == 0)
+        temp = temp->left;
+
+    while(temp != NULL)
+    {
+        cout<<temp->info<<"  ";
+        temp = inorderSuccessor(temp);
+    }
+}
 
 
 int main()
@@ -123,19 +119,14 @@ int main()
                     if(data == -1)
                         break;
                     else
-                    {
-                        struct treenode *newnode;
-                        newnode = create(data);
-                        root = insertion(root , newnode);
-                    }
+                        root = insertion(root , data);
                 }
                 break;
             }
 
-
         case 2:
             cout<<"\nIn-order traversal is : ";
-            inorder(dummy);
+            inorder(root);
             break;
 
         case 3:
@@ -149,3 +140,4 @@ int main()
     return 0;
 
 }
+
