@@ -157,10 +157,10 @@ struct node* AVLinsertion(struct node* root , int data)
     if(BalanceFactor(root)==2 && BalanceFactor(root->left)==-1)
         return LRrotation(root);
 
-    if(BalanceFactor(root)==-2 && BalanceFactor(root->left)==-1)
+    if(BalanceFactor(root)==-2 && BalanceFactor(root->right)==-1)
         return RRrotation(root);
 
-    if(BalanceFactor(root)==-2 && BalanceFactor(root->left)==1)
+    if(BalanceFactor(root)==-2 && BalanceFactor(root->right)==1)
         return RLrotation(root);
 
 
