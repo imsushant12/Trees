@@ -396,6 +396,85 @@ void treescount(int data)
     cout<<"Number of possible BSTs are = "<<result<<endl;
 }
 
+//18----------------------------------------------------------------------------------------------------------------------------------------------
+
+struct treenode* removehalf(struct treenode *root)
+{
+    if(root == NULL)
+        return NULL;
+
+    root->left = removehalf(root->left);
+    root->right = removehalf(root->right);
+
+    if(root->left == NULL && root->right == NULL)
+        return root;
+
+    if(root->left == NULL)
+    {
+        //for avoiding memory issue
+        //struct treenode *temp = root->right;
+        //delete root;
+        //return temp;
+        return root->right;
+    }
+
+    if(root->right == NULL)
+    {
+        //for avoiding memory issue
+        //struct treenode *temp = root->left;
+        //delete root;
+        //return temp;
+        return root->left;
+    }
+
+    return root;
+}
+
+//19----------------------------------------------------------------------------------------------------------------------------------------------
+
+struct treenode* removerange(struct treenode *root , int n1 , int n2)
+{
+    if(root == NULL)
+        return NULL;
+
+    root->left = removerange(root->left , n1 , n2);
+    root->right = removerange(root->right , n1 , n2);
+
+    //There are 2 possible cases for toot
+    //1.a) Root's key is smaller than min value (root is not in range)
+    if(root->info < n1)
+        return root->right;
+
+    //1.b) Root's key is greater than max value (root is not in range)
+    if(root->info > n2)
+        return root->left;
+
+    return root;
+}
+
+//20----------------------------------------------------------------------------------------------------------------------------------------------
+
+int sum = 0;
+int maxsum(struct treenode* root)
+{
+    if(root == NULL)
+        return 0;
+    if(root->left == NULL && root->right == NULL)
+        return root->info;
+
+    int l = maxsum(root->left);
+    int r = maxsum(root->right);
+
+    int max_one = max(root->info , (root->info + max(l,r)));        //for case when both left and right child is -ve
+    int max_two = max(max_one , (l + r + root->info));              //for case when only one child is -ve
+
+    sum = max(max_two , sum);
+
+    return max_one;
+
+}
+
+
 int main()
 {
     int choice,data,ans,n;
@@ -421,7 +500,10 @@ int main()
         cout<<"15. Find kth smallest element of the tree"<<endl;
         cout<<"16. To get floor and ceiling of BST"<<endl;
         cout<<"17. Number of unique BST possible"<<endl;
-        cout<<"18. EXIT"<<endl;
+        cout<<"18. Remove half nodes(single child)"<<endl;
+        cout<<"19. Remove BST keys outside the given range"<<endl;
+        cout<<"20. Find maximum path sum of the tree"<<endl;
+        cout<<"21. EXIT"<<endl;
 
         cout<<"Enter choice : ";
         cin>>choice;
@@ -431,15 +513,15 @@ int main()
         case 1:
             {
                 while(1)
-                    {
-                        cout<<"Enter element or press -1 : ";
-                        cin>>data;
-                        if(data == -1)
-                            break;
-                        else
-                            root = insertion(root , data);
-                    }
-                    break;
+                {
+                    cout<<"Enter element or press -1 : ";
+                    cin>>data;
+                    if(data == -1)
+                        break;
+                    else
+                        root = insertion(root , data);
+                }
+                break;
                 }
 
         case 2:
@@ -588,6 +670,34 @@ int main()
             }
 
         case 18:
+            {
+                temp = removehalf(root);
+                cout<<"\nLevel-order is : ";
+                levelorder(temp);
+                break;
+            }
+
+        case 19:
+            {
+                int n1,n2;
+                cout<<"\nEnter the range : ";
+                cin>>n1;
+                cin>>n2;
+
+                temp = removerange(root , n1 , n2);
+                cout<<"\nLevel-order is : ";
+                levelorder(temp);
+                break;
+            }
+
+        case 20:
+            {
+                maxsum(root);
+                cout<<"\nMaximum sum = "<<sum;
+                break;
+            }
+
+        case 21:
             exit(0);
             break;
 
