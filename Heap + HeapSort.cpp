@@ -45,6 +45,7 @@ void deleteHeap(int a[] , int n)
 {
     int i=0 , j=0;
     int temp = a[n-1];
+    int temp2 = a[0];
     a[i] = a[n-1];
     int lchild = 2*i+1;
     int rchild = 2*i+2;
@@ -70,11 +71,38 @@ void deleteHeap(int a[] , int n)
         lchild = 2*i+1;
         rchild = 2*i+2;
     }
+    a[n-1] = temp2;
 }
+
+void HeapSort(int a[] , int n)
+{
+    for(int i=(n/2)-1 ; i>=0 ; i--)
+    {
+        int j = 2*i+1;                 // Left child for current i-node
+        while(j < n-1)
+        {
+            if(a[j] < a[j+1])
+                j = j+1;
+
+            if(a[i] < a[j])
+            {
+                int temp = a[i];
+                a[i] = a[j];
+                a[j] = temp;
+
+                i = j;
+                j = 2*i+1;
+            }
+            else
+                break;
+        }
+    }
+}
+
 
 int main()
 {
-    int n,i,choice,data;
+    int n,i,choice,data,m;
     int a[100];
 
     while(1)
@@ -84,7 +112,9 @@ int main()
         cout<<"2. To insert an element"<<endl;
         cout<<"3. To delete element"<<endl;
         cout<<"4. To view the heap"<<endl;
-        cout<<"5. EXIT"<<endl;
+        cout<<"5. View sorted data"<<endl;
+        cout<<"6. Heap sort"<<endl;
+        cout<<"7. EXIT"<<endl;
         cout<<"ENTER CHOICE : ";
         cin>>choice;
 
@@ -94,6 +124,7 @@ int main()
             {
                 cout<<"\nEnter the size of heap array : ";
                 cin>>n;
+                m=n;                        //for sorting purpose
                 cout<<"\nEnter array : ";
                 for(i=0 ; i<n ; i++)
                     cin>>a[i];
@@ -116,7 +147,8 @@ int main()
         case 3:
             {
                 deleteHeap(a , n);
-                n= n-1;
+                n=n-1;
+
                 break;
             }
 
@@ -129,7 +161,35 @@ int main()
 
                 break;
             }
+
         case 5:
+            {
+                for(i=m ; i>0 ; i--)
+                {
+                    deleteHeap(a , i);
+                    n = n-1;
+                }
+                cout<<"\nSorted data = ";
+                for(i=0 ; i<m ; i++)
+                    cout<<a[i]<<"  ";
+
+                break;
+            }
+
+        case 6:
+            {
+                cout<<"\nEnter the size of heap array : ";
+                cin>>n;
+                                                    //for sorting purpose
+                cout<<"\nEnter array : ";
+                for(i=0 ; i<n ; i++)
+                    cin>>a[i];
+                HeapSort(a , n);
+
+                break;
+            }
+
+        case 7:
             {
                 exit(0);
                 break;
