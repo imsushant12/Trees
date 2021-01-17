@@ -102,7 +102,7 @@ void HeapSort(int a[] , int n)
 
 int main()
 {
-    int n,i,choice,data,m;
+    int n,i,choice,data,m,k;
     int a[100];
 
     while(1)
@@ -114,7 +114,9 @@ int main()
         cout<<"4. To view the heap"<<endl;
         cout<<"5. View sorted data"<<endl;
         cout<<"6. Heap sort"<<endl;
-        cout<<"7. EXIT"<<endl;
+        cout<<"7. Kth smallest element from max heap"<<endl;
+        cout<<"8. Kth largest element from max heap"<<endl;
+        cout<<"9. EXIT"<<endl;
         cout<<"ENTER CHOICE : ";
         cin>>choice;
 
@@ -190,6 +192,34 @@ int main()
             }
 
         case 7:
+            {
+                cout<<"\nEnter the value of k : ";
+                cin>>k;
+                for(i=0 ; i<=k ; i++)
+                {
+                    deleteHeap(a , n);
+                    n = n-1;
+                } 
+                cout<<"\nKth smallest element from max heap = "<<a[0];
+
+                break;
+            }
+
+        case 8:
+            {
+                cout<<"\nEnter the value of k : ";
+                cin>>k;
+                for(i=0 ; i<(k-1) ; i++)
+                {
+                    deleteHeap(a , n);
+                    n = n-1;
+                }
+                cout<<"\nKth largest element from max heap = "<<a[0];
+
+                break;
+            }
+
+        case 9:
             {
                 exit(0);
                 break;
